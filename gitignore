@@ -1,0 +1,14 @@
+# Vagrant
+.vagrant/
+
+# VirtualBox
+*.vbox
+*.vbox-prev
+*.vdi
+*.vmdk
+*.vmx
+*.vmxf
+*.nvram
+*.log
+*.iso
+*.ova
