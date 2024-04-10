@@ -1,5 +1,4 @@
 # PAG
-Prometheus + Alertmanager + Grafana
 
 <!---
 💚❤️ :octocat:
