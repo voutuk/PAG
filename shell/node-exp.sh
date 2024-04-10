@@ -5,11 +5,9 @@ VERSION=1.7.0
 RELEASE=node_exporter-${VERSION}.linux-amd64
 # Please Edit SHA256
 
-handle_error() {
-    echo -e "\e[30m\e[41m ✘ An error occurred during execution at line $BASH_LINENO. \e[0m"
-    exit 1
-}
-trap 'handle_error' ERR
+set -o errexit
+set -o nounset
+set -o pipefail
 
 echo -e "\e[30;44m ❍ Downloading Node Exporter v${VERSION} \e[0m"
 cd /tmp

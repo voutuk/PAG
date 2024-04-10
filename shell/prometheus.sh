@@ -5,11 +5,9 @@ VERSION=2.51.1
 RELEASE=prometheus-${VERSION}.linux-amd64
 # Please Edit SHA256
 
-handle_error() {
-    echo -e "\e[30m\e[41m ✘ An error occurred during execution at line $BASH_LINENO. \e[0m"
-    exit 1
-}
-trap 'handle_error' ERR
+set -o errexit
+set -o nounset
+set -o pipefail
 
 echo -e "\e[30;44m ❍ Downloading Prometheus v${VERSION} \e[0m"
 cd /tmp
@@ -31,7 +29,7 @@ sudo mkdir /etc/prometheus
 sudo cp -r ${RELEASE}/consoles /etc/prometheus
 sudo cp -r ${RELEASE}/console_libraries /etc/prometheus
 rm -rf ${RELEASE} ${RELEASE}.tar.gz
-sudo tee /etc/prometheus/prometheus.yml > /dev/null <<EOF
+sudo cat << EOF > /etc/prometheus/prometheus.yml
 global:
   scrape_interval: 15s
 scrape_configs:
@@ -39,7 +37,10 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['localhost:9090']
-EOF
+  - job_name: 'node1'
+    static_configs:
+      - targets: ['node1.tailade5f.ts.net:9100']
+EOF # Please Edit node1.tailade5f.ts.net:9100
 sudo chown -R prometheus:prometheus /etc/prometheus
 sudo chown -R prometheus:prometheus /var/lib/prometheus
 

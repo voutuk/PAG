@@ -1,6 +1,9 @@
 # Vagrant
 .vagrant/
 
+# KEY!!!!!!! DO NOT COMMIT YOUR tailscale TO GIT
+tailscale.sh
+
 # VirtualBox
 *.vbox
 *.vbox-prev
