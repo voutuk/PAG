@@ -1,4 +1,9 @@
 #!/bin/bash
+# Github: https://github.com/voutuk/PAG
+# SPDX-License-Identifier: BSD Zero Clause License
+#
+# This script installs Prometheus on the server.
+# Before using, edit VERSION(10), RELEASE(11), SHA256(23), and prometheus.yml(42-57).
 
 # Prometheus - https://github.com/prometheus/prometheus/releases
 VERSION=2.51.1
@@ -28,24 +33,33 @@ sudo mkdir /var/lib/prometheus
 sudo mkdir /etc/prometheus
 sudo cp -r ${RELEASE}/consoles /etc/prometheus
 sudo cp -r ${RELEASE}/console_libraries /etc/prometheus
-rm -rf ${RELEASE} ${RELEASE}.tar.gz
-sudo cat << EOF > /etc/prometheus/prometheus.yml
+# Add standart alerts rules
+wget https://raw.githubusercontent.com/samber/awesome-prometheus-alerts/master/dist/rules/host-and-hardware/node-exporter.yml
+sudo mv node-exporter.yml /etc/prometheus/alert.rules.yml
+rm -rf ${RELEASE} ${RELEASE}.tar.gz node-exporter.yml
+sudo bash -c "cat << EOF > /etc/prometheus/prometheus.yml
 global:
   scrape_interval: 15s
+rule_files:
+  - alert.rules.yml
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['alertmg.tailade5f.ts.net:9093']
 scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
       - targets: ['localhost:9090']
-  - job_name: 'node1'
+  - job_name: 'nodes'
     static_configs:
       - targets: ['node1.tailade5f.ts.net:9100']
-EOF # Please Edit node1.tailade5f.ts.net:9100
+EOF" # Please Edit node ip and alertmanager ip
 sudo chown -R prometheus:prometheus /etc/prometheus
 sudo chown -R prometheus:prometheus /var/lib/prometheus
 
 echo -e "\e[48;5;250m\e[30m ✎ Create service \e[0m"
-sudo tee /etc/systemd/system/prometheus.service > /dev/null <<EOF
+sudo sh -c 'cat > /etc/systemd/system/prometheus.service <<EOF
 [Unit]
 Description=Prometheus
 Wants=network-online.target
@@ -54,11 +68,7 @@ After=network-online.target
 User=prometheus
 Group=prometheus
 Type=simple
-ExecStart=/usr/local/bin/prometheus \
-    --config.file /etc/prometheus/prometheus.yml \
-    --storage.tsdb.path /var/lib/prometheus/ \
-    --web.console.templates=/etc/prometheus/consoles \
-    --web.console.libraries=/etc/prometheus/console_libraries
+ExecStart=/usr/local/bin/prometheus --config.file /etc/prometheus/prometheus.yml --storage.tsdb.path /var/lib/prometheus/ --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
 [Install]
 WantedBy=multi-user.target
 EOF

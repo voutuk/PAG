@@ -1,37 +1,56 @@
 Vagrant.configure("2") do |config|
-  # # Node exporter
-  # config.vm.define "node1" do |node1|
-  #   node1.vm.box = "bento/ubuntu-22.04"
-  #   node1.vm.hostname = "node1"
-  #   node1.vm.network "private_network", ip: "192.168.50.10"
-  #   node1.vm.provision "shell", inline: <<-SHELL
-  #     cd /vagrant
-  #     sudo bash node-exp.sh
-  #     sudo bash tailscale.sh
-  #   SHELL
-  # end
+  # Node exporter
+  config.vm.define "node1" do |node1|
+    node1.vm.box = "hashicorp/bionic64"
+    node1.vm.hostname = "node1"
+    node1.vm.network "private_network", ip: "192.168.50.10"
+    node1.vm.network "forwarded_port", guest: 80, host: 80
+    node1.vm.provision "shell", inline: <<-SHELL
+      cd /vagrant
+      sudo bash node-exp.sh
+      curl -fsSL https://tailscale.com/install.sh | sudo sh
+      sudo tailscale up --ssh
+      sudo bash install-apache2.sh
+    SHELL
+  end
 
   # Prometheus
   config.vm.define "prometheus" do |prometheus|
-    prometheus.vm.box = "bento/ubuntu-22.04"
+    prometheus.vm.box = "hashicorp/bionic64"
     prometheus.vm.hostname = "prometheus"
     prometheus.vm.network "private_network", ip: "192.168.50.11"
-    # prometheus.vm.provision "shell", inline: <<-SHELL
-    #   cd /vagrant
-    #   sudo bash prometheus.sh
-    #   sudo bash tailscale.sh
-    # SHELL
+    prometheus.vm.provision "shell", inline: <<-SHELL
+      cd /vagrant
+      sudo bash prometheus.sh
+      curl -fsSL https://tailscale.com/install.sh | sudo sh
+      sudo tailscale up --ssh
+    SHELL
   end
 
-  # # Grafana
-  # config.vm.define "grafana" do |grafana|
-  #   grafana.vm.box = "bento/ubuntu-22.04"
-  #   grafana.vm.hostname = "grafana"
-  #   grafana.vm.network "private_network", ip: "192.168.50.12"
-  #   grafana.vm.provision "shell", inline: <<-SHELL
-  #     cd /vagrant
-  #     sudo bash grafana.sh
-  #     sudo bash tailscale.sh
-  #   SHELL
-  # end
+  # Grafana
+  config.vm.define "grafana" do |grafana|
+    grafana.vm.box = "hashicorp/bionic64"
+    grafana.vm.hostname = "grafana"
+    grafana.vm.network "private_network", ip: "192.168.50.12"
+    grafana.vm.network "forwarded_port", guest: 3000, host: 8081
+    grafana.vm.provision "shell", inline: <<-SHELL
+      cd /vagrant
+      sudo bash grafana.sh
+      curl -fsSL https://tailscale.com/install.sh | sudo sh
+      sudo tailscale up --ssh
+    SHELL
+  end
+
+  # Alermanager
+  config.vm.define "alertmg" do |alertmg|
+    alertmg.vm.box = "hashicorp/bionic64"
+    alertmg.vm.hostname = "alertmg"
+    alertmg.vm.network "private_network", ip: "192.168.50.13"
+    alertmg.vm.provision "shell", inline: <<-SHELL
+      cd /vagrant
+      sudo bash alert-mg.sh
+      curl -fsSL https://tailscale.com/install.sh | sudo sh 
+      sudo tailscale up --ssh
+    SHELL
+  end
 end

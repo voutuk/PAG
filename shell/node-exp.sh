@@ -1,4 +1,9 @@
 #!/bin/bash
+# Github: https://github.com/voutuk/PAG
+# SPDX-License-Identifier: BSD Zero Clause License
+#
+# This script installs Alermanager on the server.
+# Before using, edit VERSION(9), RELEASE(10), SHA256(22).
 
 # Node exporter - https://github.com/prometheus/node_exporter/releases
 VERSION=1.7.0
@@ -28,14 +33,13 @@ sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
 sudo chmod 500 /usr/local/bin/node_exporter
 
 echo -e "\e[48;5;250m\e[30m ✎ Create service \e[0m"
-sudo tee /etc/systemd/system/node_exporter.service > /dev/null <<EOF
+sudo sh -c 'cat > /etc/systemd/system/node_exporter.service <<EOF
 [Unit]
 Description=Node Exporter
 Wants=network-online.target
 After=network-online.target
 StartLimitIntervalSec=180
 StartLimitBurst=5
-
 [Service]
 User=node_exporter
 Group=node_exporter
@@ -43,7 +47,6 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/local/bin/node_exporter --collector.logind
-
 [Install]
 WantedBy=multi-user.target
 EOF

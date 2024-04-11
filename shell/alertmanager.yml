@@ -1,0 +1,14 @@
+route:
+  receiver: 'telegram'
+  routes:    
+  # All alerts with severity=warning or severity=critical
+  # are dispatched to the telegram receiver.
+  - receiver: 'telegram'
+    group_wait: 10s
+    matchers:
+    - severity=~"'warning|critical|firing|info'"
+receivers:
+- name: 'telegram'
+  telegram_configs:
+  - bot_token: "6829754517:AAGKEhV2_PsQ99DaLPSYFPrZMXNhzCqJAdM"
+    chat_id: 650550237

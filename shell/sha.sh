@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Node exporter - https://github.com/prometheus/node_exporter/releases
 VERSION=1.7.0
 RELEASE=node_exporter-${VERSION}.linux-amd64
 # Please Edit SHA256

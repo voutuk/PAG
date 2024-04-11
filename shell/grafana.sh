@@ -1,4 +1,9 @@
 #!/bin/bash
+# Github: https://github.com/voutuk/PAG
+# SPDX-License-Identifier: BSD Zero Clause License
+#
+# This script installs Grafana on the server.
+# Before using, edit VERSION(9), RELEASE(10), SHA256(22).
 
 # Grafana - https://grafana.com/grafana/download
 VERSION=10.4.1
