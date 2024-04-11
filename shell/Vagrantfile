@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
       sudo bash node-exp.sh
       curl -fsSL https://tailscale.com/install.sh | sudo sh
       sudo tailscale up --ssh
-      sudo bash install-apache2.sh
+      sudo bash install-apache2.sh --authkey tskey-auth-kjfV4NH33411CNTRL-gnhQpezYD6d26h6eWQYd6dT4ZezY1tnd
     SHELL
   end
 
@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
       cd /vagrant
       sudo bash prometheus.sh
       curl -fsSL https://tailscale.com/install.sh | sudo sh
-      sudo tailscale up --ssh
+      sudo tailscale up --ssh --authkey tskey-auth-kjfV4NH33411CNTRL-gnhQpezYD6d26h6eWQYd6dT4ZezY1tnd
     SHELL
   end
 
@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
       cd /vagrant
       sudo bash grafana.sh
       curl -fsSL https://tailscale.com/install.sh | sudo sh
-      sudo tailscale up --ssh
+      sudo tailscale up --ssh --authkey tskey-auth-kjfV4NH33411CNTRL-gnhQpezYD6d26h6eWQYd6dT4ZezY1tnd
     SHELL
   end
 
@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
       cd /vagrant
       sudo bash alert-mg.sh
       curl -fsSL https://tailscale.com/install.sh | sudo sh 
-      sudo tailscale up --ssh
+      sudo tailscale up --ssh --authkey tskey-auth-kjfV4NH33411CNTRL-gnhQpezYD6d26h6eWQYd6dT4ZezY1tnd
     SHELL
   end
 end
