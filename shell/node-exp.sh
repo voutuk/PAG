@@ -49,7 +49,7 @@ RestartSec=5s
 ExecStart=/usr/local/bin/node_exporter --collector.logind
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF'
 
 echo -e "\e[48;5;183m\e[30m ✶ Starting Node Exporter \e[0m"
 sudo systemctl daemon-reload
