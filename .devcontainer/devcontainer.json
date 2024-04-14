@@ -1,0 +1,6 @@
+{
+    "name": "Grafana",
+    "dockerComposeFile": "./docker/docker-compose.yaml",
+    "service": "grafana",
+    "workspaceFolder": "/docker"
+}
